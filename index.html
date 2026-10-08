@@ -119,6 +119,7 @@ footer{padding:20px 0 90px;color:var(--muted);font-size:12px;text-align:center}
   <a class="wa" id="wabtn" href="https://wa.me/917385588253" target="_blank" rel="noopener">WhatsApp</a>
 </div>
 
+<iframe name="gf_iframe" style="display:none" title="hidden"></iframe>
 <script>
 // EDIT THIS: your sales number (country code + number, no + or spaces)
 var WA_NUMBER = "917385588253";
@@ -135,10 +136,14 @@ var ENTRY = {
 };
 function sendToGoogleForm(v){
   try{
-    var body = new URLSearchParams();
-    for(var k in ENTRY){ body.append(ENTRY[k], v[k]); }
-    fetch(GOOGLE_FORM_URL,{method:"POST",mode:"no-cors",
-      headers:{"Content-Type":"application/x-www-form-urlencoded"},body:body.toString()});
+    var f=document.createElement("form");
+    f.method="POST"; f.action=GOOGLE_FORM_URL; f.target="gf_iframe"; f.style.display="none";
+    var data={fvv:"1",pageHistory:"0"};
+    for(var k in ENTRY){ data[ENTRY[k]]=v[k]; }
+    for(var n in data){
+      var i=document.createElement("input"); i.type="hidden"; i.name=n; i.value=data[n]; f.appendChild(i);
+    }
+    document.body.appendChild(f); f.submit();
   }catch(e){}
 }
 function $(id){return document.getElementById(id)}
