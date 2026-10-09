@@ -79,7 +79,74 @@ footer{padding:20px 0 90px;color:var(--muted);font-size:12px;text-align:center}
   </table></div>
 </div></section>
 
-<section id="visit"><div class="wrap">
+<!-- ===== PHOTO GALLERY START (paste just above <section id="visit">) ===== -->
+<style>
+.gal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+@media(min-width:700px){.gal-grid{grid-template-columns:repeat(3,1fr)}}
+.gal-grid button{padding:0;border:0;border-radius:10px;overflow:hidden;cursor:pointer;background:var(--line);aspect-ratio:4/3}
+.gal-grid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.gal-grid button:hover img{transform:scale(1.05)}
+.lb{position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.93);display:none;align-items:center;justify-content:center;flex-direction:column;z-index:60}
+.lb.open{display:flex}
+.lb img{max-width:96vw;max-height:78vh;border-radius:6px}
+.lb p{color:#fff;margin:12px 16px 0;text-align:center;font-size:15px}
+.lb button{position:absolute;background:rgba(255,255,255,.18);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:24px;cursor:pointer}
+#lbx{top:calc(12px + env(safe-area-inset-top,0px));right:12px}
+#lbp{left:8px;top:50%}
+#lbn{right:8px;top:50%}
+</style>
+
+<section><div class="wrap">
+  <h2>Real site photos</h2>
+  <p style="color:var(--muted);margin:0 0 14px">Actual photos from the project site. Tap any photo to view it larger.</p>
+  <div class="gal-grid">
+    <button type="button"><img src="images/gallery-1.jpg" alt="Approach road with hill view" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-2.jpg" alt="Project entrance gate" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-3.jpg" alt="Open plots near the entrance" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-8.jpg" alt="Plots with boundary markers" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-9.jpg" alt="Hills and greenery around the project" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-6.jpg" alt="Green open land with road access" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-4.jpg" alt="Concrete road leading to the site" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-5.jpg" alt="Entrance gate and internal road" loading="lazy"></button>
+    <button type="button"><img src="images/gallery-7.jpg" alt="View of the gate with hills behind" loading="lazy"></button>
+  </div>
+</div></section>
+
+<div class="lb" id="lb">
+  <button type="button" id="lbx" aria-label="Close">&times;</button>
+  <button type="button" id="lbp" aria-label="Previous">&#8249;</button>
+  <img id="lbimg" alt="">
+  <p id="lbcap"></p>
+  <button type="button" id="lbn" aria-label="Next">&#8250;</button>
+</div>
+
+<script>
+(function(){
+  var imgs=[].slice.call(document.querySelectorAll(".gal-grid img")),
+      lb=document.getElementById("lb"), big=document.getElementById("lbimg"),
+      cap=document.getElementById("lbcap"), cur=0, x0=0;
+  function show(i){cur=(i+imgs.length)%imgs.length;big.src=imgs[cur].src;cap.textContent=imgs[cur].alt;lb.classList.add("open")}
+  function hide(){lb.classList.remove("open")}
+  imgs.forEach(function(im,i){im.parentNode.addEventListener("click",function(){show(i)})});
+  document.getElementById("lbx").onclick=hide;
+  document.getElementById("lbp").onclick=function(){show(cur-1)};
+  document.getElementById("lbn").onclick=function(){show(cur+1)};
+  lb.addEventListener("click",function(e){if(e.target===lb)hide()});
+  document.addEventListener("keydown",function(e){
+    if(!lb.classList.contains("open"))return;
+    if(e.key==="Escape")hide();
+    if(e.key==="ArrowLeft")show(cur-1);
+    if(e.key==="ArrowRight")show(cur+1);
+  });
+  lb.addEventListener("touchstart",function(e){x0=e.touches[0].clientX});
+  lb.addEventListener("touchend",function(e){
+    var d=e.changedTouches[0].clientX-x0;
+    if(Math.abs(d)>50)show(d<0?cur+1:cur-1);
+  });
+})();
+</script>
+<!-- ===== PHOTO GALLERY END ===== -->
+  <section id="visit"><div class="wrap">
   <div class="formcard">
     <div id="formbox">
       <h2>Book your free site visit</h2>
